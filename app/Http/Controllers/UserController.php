@@ -105,7 +105,7 @@ public function destroy($id){
 
       if($user){
            Auth::login($user);
-          User::where('mobile',$request->mobile)->update(['otp'=>$request->otp]);
+          User::where('mobile',$request->mobile)->update(['otp'=>null]);
           return redirect()->route('dashboard');
       }else{
             return back();
