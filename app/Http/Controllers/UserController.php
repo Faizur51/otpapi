@@ -58,15 +58,7 @@ public function destroy($id){
   }
 }
 
-
-
-
-
-
-
-
-
-
+//otp
 
    public function otpForm(){
        return view('otp-form');
@@ -78,7 +70,7 @@ public function destroy($id){
        $otp=rand(1111,9999);
        info("otp:".$otp);
        $user= User::where('mobile',$request->mobile)->update(['otp'=>$otp]);
-
+        //send otp.............
        $to = "$request->mobile";
        $token = "187dbece62dd1beea422cf8d20d0a6e6";
        $message = "Your varification code is: ".$otp;
@@ -90,15 +82,15 @@ public function destroy($id){
            'to'=>"$to",
            'message'=>"$message",
            'token'=>"$token"
-       ); // Add parameters in key value
+       );
+
+       // Add parameters in key value
        $ch = curl_init(); // Initialize cURL
        curl_setopt($ch, CURLOPT_URL,$url);
        curl_setopt($ch, CURLOPT_ENCODING, '');
        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
        $smsresult = curl_exec($ch);
-
-
 
        return response()->json($user,200);
 
@@ -107,6 +99,7 @@ public function destroy($id){
 
 
    public function sendWithotp(Request $request){
+
 
       $user=User::where('mobile',$request->mobile)->where('otp',$request->otp)->first();
 
