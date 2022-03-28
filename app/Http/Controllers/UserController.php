@@ -2,12 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    public function index(){
+     $user=UserResource::collection(User::paginate());
+
+        return response()->json([
+             'success'=>true,
+             'data'=>$user,
+             'message'=>'user retrived success',
+
+        ]);
+    }
+
+
+public function show($id){
+
+    $user= User::select('id','name','email','mobile','created_at')->find($id);
+if($user){
+    return response()->json([
+        'success'=>true,
+        'data'=>$user,
+        'message'=>' single user retrived success',
+
+    ]);
+}else{
+    return response()->json('user not found');
+}
+
+}
+
+public function destroy($id){
+    $user= User::find($id);
+  if($user){
+      $user->delete();
+      return response()->json([
+          'success'=>true,
+          'data'=>$user,
+          'message'=>' single user delete success',
+
+      ]);
+  }else{
+      return response()->json([
+          'success'=>false,
+          'data'=>[],
+          'message'=>'user NOt Found',
+
+      ]);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
    public function otpForm(){
        return view('otp-form');
    }
